@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentSafe Analytics | Predictor de Retención de Personal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>TalentSafe <span class="accent">Analytics</span></span>
+            </div>
+            <h1>Sistema Predictivo de Rotación de Talento</h1>
+            <p class="subtitle">Predicción del riesgo de renuncia del empleado para los próximos 6 meses utilizando Machine Learning (Random Forest Optimizado)</p>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Left: Inputs Form -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h2>Características del Empleado</h2>
+                </div>
+                <form id="prediction-form" class="employee-form">
+                    
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="edad">Edad (Años)</label>
+                            <div class="range-container">
+                                <input type="range" id="edad" name="edad" min="22" max="60" value="35">
+                                <span class="range-value" id="edad-val">35</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="años_en_empresa">Años en la Empresa</label>
+                            <div class="range-container">
+                                <input type="range" id="años_en_empresa" name="años_en_empresa" min="0" max="20" value="5">
+                                <span class="range-value" id="años_en_empresa-val">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="salario_mensual">Salario Mensual (USD)</label>
+                            <div class="range-container">
+                                <input type="range" id="salario_mensual" name="salario_mensual" min="500" max="5000" step="50" value="2000">
+                                <span class="range-value" id="salario_mensual-val">$2000</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="horas_extra_semana">Horas Extra / Semana</label>
+                            <div class="range-container">
+                                <input type="range" id="horas_extra_semana" name="horas_extra_semana" min="0" max="20" value="3">
+                                <span class="range-value" id="horas_extra_semana-val">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="num_proyectos_año">Proyectos / Año</label>
+                            <div class="range-container">
+                                <input type="range" id="num_proyectos_año" name="num_proyectos_año" min="1" max="10" value="4">
+                                <span class="range-value" id="num_proyectos_año-val">4</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="distancia_casa_trabajo_km">Distancia Casa-Trabajo (km)</label>
+                            <div class="range-container">
+                                <input type="range" id="distancia_casa_trabajo_km" name="distancia_casa_trabajo_km" min="1" max="80" value="15">
+                                <span class="range-value" id="distancia_casa_trabajo_km-val">15 km</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="ultima_evaluacion_desempeño">Última Evaluación (0.0 a 1.0)</label>
+                            <div class="range-container">
+                                <input type="range" id="ultima_evaluacion_desempeño" name="ultima_evaluacion_desempeño" min="0.1" max="1.0" step="0.05" value="0.75">
+                                <span class="range-value" id="ultima_evaluacion_desempeño-val">0.75</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="capacitaciones_recibidas">Capacitaciones Recibidas (Año)</label>
+                            <div class="range-container">
+                                <input type="range" id="capacitaciones_recibidas" name="capacitaciones_recibidas" min="0" max="5" value="2">
+                                <span class="range-value" id="capacitaciones_recibidas-val">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="satisfaccion_laboral">Satisfacción Laboral</label>
+                            <select id="satisfaccion_laboral" name="satisfaccion_laboral" class="custom-select">
+                                <option value="1">1 - Muy Insatisfecho</option>
+                                <option value="2">2 - Insatisfecho</option>
+                                <option value="3" selected>3 - Neutro</option>
+                                <option value="4">4 - Satisfecho</option>
+                                <option value="5">5 - Muy Satisfecho</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ascenso en los últimos 2 años</label>
+                            <div class="radio-toggle">
+                                <input type="radio" id="ascenso-no" name="tiene_ascenso_ultimos_2_años" value="0" checked>
+                                <label for="ascenso-no">No</label>
+                                
+                                <input type="radio" id="ascenso-si" name="tiene_ascenso_ultimos_2_años" value="1">
+                                <label for="ascenso-si">Sí</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-predict">
+                        <span>Calcular Riesgo de Renuncia</span>
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right: Results Dashboard -->
+            <section class="card results-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h2>Análisis de Riesgo</h2>
+                </div>
+                
+                <div id="placeholder-result" class="result-placeholder">
+                    <i class="fa-solid fa-user-shield placeholder-icon"></i>
+                    <p>Configure las características y presione "Calcular Riesgo de Renuncia" para ver la predicción en tiempo real.</p>
+                </div>
+
+                <div id="real-result" class="result-display hidden">
+                    <div class="gauge-wrapper">
+                        <div class="radial-gauge" id="risk-gauge" style="--risk-percent: 0;">
+                            <div class="gauge-inner">
+                                <span class="percentage" id="risk-percentage">0%</span>
+                                <span class="label">Probabilidad</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="risk-badge-container">
+                        <span class="risk-title">Nivel de Alerta:</span>
+                        <span class="badge" id="risk-badge">Bajo</span>
+                    </div>
+
+                    <div class="prediction-text-box">
+                        <p id="prediction-summary"></p>
+                    </div>
+
+                    <div class="recommendations-container">
+                        <h3><i class="fa-solid fa-lightbulb"></i> Recomendaciones de Retención:</h3>
+                        <ul id="recommendations-list">
+                            <!-- JS populated -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 TalentSafe Analytics. Ingeniería de Software - 7mo Semestre.</p>
+        </footer>
+    </div>
+    
+    <!-- Custom JS -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
